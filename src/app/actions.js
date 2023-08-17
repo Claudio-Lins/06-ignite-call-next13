@@ -6,7 +6,7 @@ import { cookies } from "next/headers"
 
 export async function createCookie(data) {
   cookies().set({
-    name: "@ignitecall",
+    name: "@ignitecall:userId",
     value: data,
     maxAge: 60 * 60 * 24 * 7,
     path: "/",

@@ -35,7 +35,6 @@ const registerFormSchema = z.object({
 type RegisterFormData = z.infer<typeof registerFormSchema>
 
 export default function Register() {
-  const { setStep } = stepsStore()
   const router = useRouter()
   const query = useSearchParams()
   const {
@@ -63,7 +62,6 @@ export default function Register() {
       })
 
       await router.push("/register/connect-calendar")
-      setStep(2)
     } catch (err) {
       if (err instanceof AxiosError && err?.response?.data?.message) {
         alert(err.response.data.message)
@@ -84,7 +82,7 @@ export default function Register() {
           Precisamos de algumas informações para criar seu perfil! Ah, você pode
           editar essas informações depois.
         </p>
-        <Steps />
+        <Steps step={1} />
       </header>
       <div className="p-6 bg-gray-800 rounded-lg mt-6">
         <form

@@ -1,10 +1,10 @@
-import { stepsStore } from "@/context/StepsStore"
 import { cn } from "@/lib/utils"
 
-import React from "react"
+interface StepsProps {
+  step: 1 | 2 | 3 | 4
+}
 
-export function Steps() {
-  const { step } = stepsStore()
+export function Steps({ step }: StepsProps) {
   return (
     <div className="w-full">
       <span className="text-xs text-gray-200">Passo {step} de 4</span>
