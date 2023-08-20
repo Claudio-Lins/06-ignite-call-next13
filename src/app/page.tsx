@@ -1,7 +1,6 @@
-import { GoogleBtn } from "@/components/GoogleBtn";
-import Image from "next/image";
-import previewImage from "@/assets/app-preview.png";
-import { ClaimUserNameForm } from "@/components/ClaimUserNameForm";
+import Image from "next/image"
+import previewImage from "@/assets/app-preview.png"
+import { ClaimUserNameForm } from "@/components/ClaimUserNameForm"
 
 export default function Home() {
   return (
@@ -28,5 +27,5 @@ export default function Home() {
         />
       </div>
     </main>
-  );
+  )
 }

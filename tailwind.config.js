@@ -22,7 +22,7 @@ module.exports = {
           200: "#A9A9B2",
           400: "#7C7C8A",
           600: "#323238",
-          800: "#323238",
+          800: "#202024",
           900: "#121214",
         },
         ignite: {
@@ -85,4 +85,4 @@ module.exports = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-};
+}
