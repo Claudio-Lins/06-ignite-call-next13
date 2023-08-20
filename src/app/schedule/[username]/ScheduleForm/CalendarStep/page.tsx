@@ -3,6 +3,7 @@
 import TimePicker from "@/app/schedule/components/TimePicker"
 import { Calendar } from "@/components/Calendar"
 import { Button } from "@/components/ui/button"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
 import dayjs from "dayjs"
 import React, { useState } from "react"
@@ -30,32 +31,40 @@ export function CalendarStep() {
             <span className="font-medium capitalize">{weekDay} </span>
             <span className="text-gray-200">{dayAndMonth}</span>
           </header>
-          <div className="time-picker-list w-full flex flex-col gap-2 last:mb-6 p-2 mt-2">
-            <Button className="time-picker-item bg-gray-600 text-gray-100 text-sm disabled:bg-none focus:shadow-sm">
-              08:00
-            </Button>
-            <Button className="time-picker-item bg-gray-600 text-gray-100 text-sm disabled:bg-none focus:shadow-sm">
-              08:00
-            </Button>
-            <Button className="time-picker-item bg-gray-600 text-gray-100 text-sm disabled:bg-none focus:shadow-sm">
-              08:00
-            </Button>
-            <Button className="time-picker-item bg-gray-600 text-gray-100 text-sm disabled:bg-none focus:shadow-sm">
-              08:00
-            </Button>
-            <Button className="time-picker-item bg-gray-600 text-gray-100 text-sm disabled:bg-none focus:shadow-sm">
-              08:00
-            </Button>
-            <Button className="time-picker-item bg-gray-600 text-gray-100 text-sm disabled:bg-none focus:shadow-sm">
-              08:00
-            </Button>
-            <Button className="time-picker-item bg-gray-600 text-gray-100 text-sm disabled:bg-none focus:shadow-sm">
-              08:00
-            </Button>
-            <Button className="time-picker-item bg-gray-600 text-gray-100 text-sm disabled:bg-none focus:shadow-sm">
-              08:00
-            </Button>
-          </div>
+          <ScrollArea>
+            <div className="time-picker-list w-full flex flex-col gap-2 last:mb-6 p-2 mt-2">
+              <Button className="time-picker-item bg-gray-600 text-gray-100 text-sm disabled:bg-none focus:shadow-sm">
+                08:00
+              </Button>
+              <Button className="time-picker-item bg-gray-600 text-gray-100 text-sm disabled:bg-none focus:shadow-sm">
+                08:00
+              </Button>
+              <Button className="time-picker-item bg-gray-600 text-gray-100 text-sm disabled:bg-none focus:shadow-sm">
+                08:00
+              </Button>
+              <Button className="time-picker-item bg-gray-600 text-gray-100 text-sm disabled:bg-none focus:shadow-sm">
+                08:00
+              </Button>
+              <Button className="time-picker-item bg-gray-600 text-gray-100 text-sm disabled:bg-none focus:shadow-sm">
+                08:00
+              </Button>
+              <Button className="time-picker-item bg-gray-600 text-gray-100 text-sm disabled:bg-none focus:shadow-sm">
+                08:00
+              </Button>
+              <Button className="time-picker-item bg-gray-600 text-gray-100 text-sm disabled:bg-none focus:shadow-sm">
+                08:00
+              </Button>
+              <Button className="time-picker-item bg-gray-600 text-gray-100 text-sm disabled:bg-none focus:shadow-sm">
+                08:00
+              </Button>
+              <Button className="time-picker-item bg-gray-600 text-gray-100 text-sm disabled:bg-none focus:shadow-sm">
+                08:00
+              </Button>
+              <Button className="time-picker-item bg-gray-600 text-gray-100 text-sm disabled:bg-none focus:shadow-sm">
+                08:00
+              </Button>
+            </div>
+          </ScrollArea>
         </div>
       )}
     </div>
