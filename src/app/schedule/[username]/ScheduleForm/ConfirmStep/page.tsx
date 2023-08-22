@@ -9,25 +9,29 @@ import { ArrowRight, Calendar, Clock } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-const conformFormSchema = z.object({
-  name: z.string().min(3, {
-    message: "O nome deve ter pelo menos 3 caracteres",
-  }),
-  email: z.string().email({
-    message: "O e-mail deve ser válido",
-  }),
+const confirmFormSchema = z.object({
+  name: z.string().min(3, { message: "O nome precisa no mínimo 3 caracteres" }),
+  email: z.string().email({ message: "Digite um e-mail válido" }),
   observations: z.string().nullable(),
 })
 
-type ConfirmFormData = z.infer<typeof conformFormSchema>
+type ConfirmFormData = z.infer<typeof confirmFormSchema>
 
-export function ConfirmStep() {
+interface ConfirmStepProps {
+  schedulingDate: Date
+  onCancelConfirmation: () => void
+}
+
+export function ConfirmStep({
+  schedulingDate,
+  onCancelConfirmation,
+}: ConfirmStepProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting, errors },
   } = useForm<ConfirmFormData>({
-    resolver: zodResolver(conformFormSchema),
+    resolver: zodResolver(confirmFormSchema),
   })
 
   function handleConfirmSchedule(data: ConfirmFormData) {

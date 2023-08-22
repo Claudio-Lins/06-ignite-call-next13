@@ -24,7 +24,7 @@ export default async function Schedule({ params }: ScheduleProps) {
   })
 
   return (
-    <div className="w-full flex flex-col items-center mt-20">
+    <div className="w-full flex flex-col items-center mt-10">
       <div className="max-w-[852px] px-4">
         {!!user && (
           <UserHeader

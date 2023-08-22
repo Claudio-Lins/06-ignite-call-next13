@@ -7,39 +7,36 @@ import dayjs from "dayjs"
 
 import { getWeekDays } from "@/uteis/get-week-days"
 import { cn } from "@/lib/utils"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/lib/axios"
+import { useParams } from "next/navigation"
 
 interface CalendarWeek {
+  week: number
   days: Array<{
     date: dayjs.Dayjs
     disabled: boolean
   }>
-  week: number
 }
 
 type CalendarWeeks = CalendarWeek[]
 
-interface UnavailableDates {
-  blockedDates: number[]
+interface BlockedDates {
   blockedWeekDays: number[]
-}
-
-interface ParseCalendarWeeksProps {
-  currentDate: dayjs.Dayjs
-  unavailableDates?: UnavailableDates | null
+  blockedDates: number[]
 }
 
 interface CalendarProps {
   selectedDate: Date | null
-  onDateSelected: (date: Date | null) => void
-  // currentDate?: Date
-  // onDateChange: (date: Date) => void
-  // unavailableDates?: UnavailableDates | null
+  onDateSelected: (date: Date) => void
 }
 
-export function Calendar({ onDateSelected, selectedDate }: CalendarProps) {
+export function Calendar({ selectedDate, onDateSelected }: CalendarProps) {
   const [currentDate, setCurrentDate] = useState(() => {
     return dayjs().set("date", 1)
   })
+
+  const { username } = useParams()
 
   function handlePreviousMonth() {
     const previousMonthData = currentDate.subtract(1, "month")
@@ -54,19 +51,39 @@ export function Calendar({ onDateSelected, selectedDate }: CalendarProps) {
   }
 
   const shortWeekDays = getWeekDays({ short: true })
+
   const currentMonth = currentDate.format("MMMM")
   const currentYear = currentDate.format("YYYY")
 
+  const { data: blockedDates } = useQuery<BlockedDates>(
+    ["blocked-dates", currentDate.get("year"), currentDate.get("month")],
+    async () => {
+      const response = await api.get(`/users/${username}/blocked-dates`, {
+        params: {
+          year: currentDate.get("year"),
+          month: currentDate.get("month") + 1,
+        },
+      })
+
+      return response.data
+    }
+  )
+
   const calendarWeeks = useMemo(() => {
+    if (!blockedDates) {
+      return []
+    }
+
     const daysInMonthArray = Array.from({
       length: currentDate.daysInMonth(),
     }).map((_, i) => {
       return currentDate.set("date", i + 1)
     })
-    const fisrtWeekDay = currentDate.get("day")
+
+    const firstWeekDay = currentDate.get("day")
 
     const previousMonthFillArray = Array.from({
-      length: fisrtWeekDay,
+      length: firstWeekDay,
     })
       .map((_, i) => {
         return currentDate.subtract(i + 1, "day")
@@ -90,7 +107,14 @@ export function Calendar({ onDateSelected, selectedDate }: CalendarProps) {
         return { date, disabled: true }
       }),
       ...daysInMonthArray.map((date) => {
-        return { date, disabled: date.endOf("day").isBefore(new Date()) }
+        return {
+          date,
+          disabled:
+            date.endOf("day").isBefore(new Date()) ||
+            (blockedDates &&
+              (blockedDates.blockedWeekDays.includes(date.get("day")) ||
+                blockedDates.blockedDates?.includes(date.get("date")))),
+        }
       }),
       ...nextMonthFillArray.map((date) => {
         return { date, disabled: true }
@@ -102,15 +126,18 @@ export function Calendar({ onDateSelected, selectedDate }: CalendarProps) {
         const isNewWeek = i % 7 === 0
 
         if (isNewWeek) {
-          weeks.push({ week: i / 7 + 1, days: original.slice(i, i + 7) })
+          weeks.push({
+            week: i / 7 + 1,
+            days: original.slice(i, i + 7),
+          })
         }
+
         return weeks
       },
       []
     )
-
     return calendarWeeks
-  }, [currentDate])
+  }, [currentDate, blockedDates])
 
   return (
     <div className="flex flex-col gap-2 p-6">
@@ -141,35 +168,35 @@ export function Calendar({ onDateSelected, selectedDate }: CalendarProps) {
       <table className="w-full border-spacing-2 table-fixed border-separate">
         <thead className="">
           <tr className="w-full text-gray-500 text-sm font-medium">
-            {shortWeekDays.map((day) => (
-              <th key={day} className=" text-gray-200 text-sm font-medium">
-                {day}.
+            {shortWeekDays.map((weekDay) => (
+              <th key={weekDay} className=" text-gray-200 text-sm font-medium">
+                {weekDay}.
               </th>
             ))}
           </tr>
         </thead>
         <tbody className="before:leading-3 before:content-['.'] before:block before:text-gray-800">
-          {calendarWeeks.map(({ week, days }) => (
-            <tr key={week} className="w-full">
-              {days.map(({ date, disabled }) => (
-                <td key={date.format("DD")} className="w-full">
-                  <button
-                    disabled={disabled}
-                    onClick={() => onDateSelected(date.toDate())}
-                    className={cn(
-                      "w-full aspect-square bg-gray-600 text-center cursor-pointer rounded-lg hover:bg-gray-700 disabled:bg-transparent disabled:opacity-40 disabled:cursor-default",
-                      date.get("date") === new Date().getDate() &&
-                        date.get("month") === new Date().getMonth() &&
-                        date.get("year") === new Date().getFullYear() &&
-                        "bg-gray-700"
-                    )}
-                  >
-                    {date.get("date")}
-                  </button>
-                </td>
-              ))}
-            </tr>
-          ))}
+          {calendarWeeks.map(({ week, days }) => {
+            return (
+              <tr key={week} className="w-full">
+                {days.map(({ date, disabled }) => {
+                  return (
+                    <td key={date.format("DD")} className="w-full">
+                      <button
+                        disabled={disabled}
+                        onClick={() => onDateSelected(date.toDate())}
+                        className={cn(
+                          "w-full aspect-square bg-gray-600 text-center cursor-pointer rounded-lg focus:border hover:bg-gray-700 disabled:bg-transparent disabled:opacity-40 disabled:cursor-default"
+                        )}
+                      >
+                        {date.get("date")}
+                      </button>
+                    </td>
+                  )
+                })}
+              </tr>
+            )
+          })}
         </tbody>
       </table>
     </div>
