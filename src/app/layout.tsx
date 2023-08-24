@@ -1,6 +1,7 @@
 import "./globals.css"
 import type { Metadata } from "next"
 import { NextAuthProvider } from "./providers/NextAuthProvider"
+import { Toaster } from "@/components/ui/toaster"
 import {
   Roboto_Flex as Roboto,
   Bai_Jamjuree as BaiJamjuree,
@@ -37,6 +38,7 @@ export default function RootLayout({
       <body
         className={`${roboto.variable} ${baiJamjuree.variable} bg-gray-900 font-sans leading-relaxed text-gray-100`}
       >
+        <Toaster />
         <ReactQueryProvider>
           <NextAuthProvider>{children}</NextAuthProvider>
         </ReactQueryProvider>

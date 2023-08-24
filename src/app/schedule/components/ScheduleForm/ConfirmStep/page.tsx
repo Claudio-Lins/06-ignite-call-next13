@@ -1,13 +1,16 @@
-"use client"
-
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { api } from "@/lib/axios"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Label } from "@radix-ui/react-label"
-import { ArrowRight, Calendar, Clock } from "lucide-react"
+import dayjs from "dayjs"
+import { Calendar, Clock } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { useParams, useRouter } from "next/navigation"
+import { useToast } from "@/components/ui/use-toast"
+import { Spinner } from "phosphor-react"
 
 const confirmFormSchema = z.object({
   name: z.string().min(3, { message: "O nome precisa no mínimo 3 caracteres" }),
@@ -26,6 +29,10 @@ export function ConfirmStep({
   schedulingDate,
   onCancelConfirmation,
 }: ConfirmStepProps) {
+  const { username } = useParams()
+  const router = useRouter()
+  const { toast } = useToast()
+
   const {
     register,
     handleSubmit,
@@ -34,20 +41,32 @@ export function ConfirmStep({
     resolver: zodResolver(confirmFormSchema),
   })
 
-  function handleConfirmSchedule(data: ConfirmFormData) {
-    console.log(data)
+  async function handleConfirmSchedule(data: ConfirmFormData) {
+    await api.post(`/users/${username}/schedule`, {
+      name: data.name,
+      email: data.email,
+      observations: data.observations,
+      date: schedulingDate,
+    })
+    toast({
+      title: "Agendamento realizado com sucesso!",
+    })
+    onCancelConfirmation()
   }
+
+  const describeDate = dayjs(schedulingDate).format("DD[ de ]MMMM[ de ]YYYY")
+  const describeTime = dayjs(schedulingDate).format("HH:mm[h]")
 
   return (
     <div className="mt-6 w-[540px] bg-gray-800 p-6 flex flex-col">
       <header className="flex items-center gap-4">
         <div className="flex items-center gap-2">
           <Calendar size={16} className="text-gray-200" />
-          <span className="text-white">20 de dezembro de 2023</span>
+          <span className="text-white">{describeDate}</span>
         </div>
         <div className="flex items-center gap-2">
           <Clock size={16} className="text-gray-200" />
-          <span className="text-white">08:00</span>
+          <span className="text-white">{describeTime}</span>
         </div>
       </header>
       <hr className=" border-gray-600 my-6" />
@@ -94,6 +113,7 @@ export function ConfirmStep({
           </div>
           <div className="flex items-center justify-end gap-4">
             <Button
+              onClick={onCancelConfirmation}
               variant={"ghost"}
               disabled={isSubmitting}
               type="button"
@@ -107,6 +127,7 @@ export function ConfirmStep({
               className="flex items-center gap-2 bg-ignite-500 hover:bg-ignite-600"
             >
               Confirmar
+              {isSubmitting && <Spinner className="animate-spin" />}
             </Button>
           </div>
         </form>

@@ -2,7 +2,7 @@ import "server-only"
 
 import prisma from "@/lib/prisma"
 import { UserHeader } from "../components/UserHeader"
-import { ScheduleForm } from "./ScheduleForm/page"
+import { ScheduleForm } from "../components/page"
 
 export const revalidate = 86400 // 1 day
 
