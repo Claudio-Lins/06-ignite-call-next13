@@ -27,6 +27,8 @@ export async function POST(request: NextRequest) {
     },
   })
 
+  // setCookie
+
   cookies().set("@ignitecall:userId", user.id, {
     maxAge: 60 * 60 * 24 * 7, // 7 days
     path: "/",
