@@ -54,14 +54,24 @@ export default function Register() {
   }, [query, setValue])
 
   async function handleRegister(data: RegisterFormData) {
+    console.log("Linha 57")
     try {
-      await api.post("/users", {
-        name: data.name,
-        username: data.username,
+      await fetch("api/users", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
+      console.log("Linha 66")
+      // await api.post("/users", {
+      //   name: data.name,
+      //   username: data.username,
+      // })
 
-      await router.push("/register/connect-calendar")
+      router.push("/register/connect-calendar")
     } catch (err) {
+      console.log("Linha 74")
       if (err instanceof AxiosError && err?.response?.data?.message) {
         alert(err.response.data.message)
         return
