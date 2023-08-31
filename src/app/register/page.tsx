@@ -56,7 +56,7 @@ export default function Register() {
 
   async function handleRegister(data: RegisterFormData) {
     try {
-      await fetch("ape/users", {
+      await fetch("api/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
