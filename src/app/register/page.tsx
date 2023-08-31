@@ -56,17 +56,10 @@ export default function Register() {
 
   async function handleRegister(data: RegisterFormData) {
     try {
-      await fetch("api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+      await api.post("/users", {
+        name: data.name,
+        username: data.username,
       })
-      // await api.post("/users", {
-      //   name: data.name,
-      //   username: data.username,
-      // })
 
       await router.push("/register/connect-calendar")
     } catch (err) {
