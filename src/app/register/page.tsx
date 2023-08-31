@@ -12,7 +12,6 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect } from "react"
 import axios, { AxiosError } from "axios"
 import { api } from "@/lib/axios"
-import { stepsStore } from "@/context/StepsStore"
 
 const registerFormSchema = z.object({
   username: z
@@ -68,7 +67,7 @@ export default function Register() {
         return
       }
 
-      console.error(err)
+      console.error(err, "Aqui")
     }
   }
 
