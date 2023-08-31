@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from "react"
-import { CalendarStep } from "./ScheduleForm/CalendarStep/page"
+import { CalendarStep } from "./ScheduleForm/CalendarStep"
 import { ConfirmStep } from "./ScheduleForm/ConfirmStep/page"
 
 export function ScheduleForm() {
