@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "postinstall": "prisma db push",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -27,7 +26,6 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "dayjs": "^1.11.9",
-    "encoding": "^0.1.13",
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.13",
     "googleapis": "^126.0.0",
@@ -51,6 +49,6 @@
   },
   "devDependencies": {
     "@types/cookie": "^0.5.1",
-    "prisma": "^5.2.0"
+    "prisma": "^5.1.1"
   }
 }
